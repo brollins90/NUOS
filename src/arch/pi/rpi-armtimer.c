@@ -41,6 +41,7 @@ void armtimer_irq_handler(void)
 {
     static int lit = 0;
     armtimer->IRQClear = 1;
+    debug_write_string("-", 1);
 
     if( lit ) {
         //_put32(GPCLR1, RPI_GPIO_FSEL0_05_OUTPUT);
@@ -53,7 +54,8 @@ void armtimer_irq_handler(void)
         lit = 1;
         //debug_write_string("on ", 3);
     }
-    debug_write_string("-", 1);
+    
+    debug_write_reg();
 }
 
 void init_arm_timer(void)

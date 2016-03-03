@@ -12,10 +12,10 @@
 .equ    USR_STACK_TOP,       0x4000
 .equ    FIQ_STACK_TOP,       0x4000
 .equ    IRQ_STACK_TOP,       0x8000
-.equ    SVC_STACK_TOP,       0x8000000
+.equ    SVC_STACK_TOP,       0x4000
 .equ    ABT_STACK_TOP,       0x4000
 .equ    UND_STACK_TOP,       0x4000
-.equ    SYS_STACK_TOP,       0x4000
+.equ    SYS_STACK_TOP,       0x8000000
 
 .text
 .code 32
