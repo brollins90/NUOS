@@ -87,32 +87,28 @@ _irq_vector:
     SUBS    pc, lr, #4
 
 _swi_vector:
-    STMFD   sp!, {r0-r12, lr}
+    PUSH {r0-r12,lr}        /* STMFD   sp!, {r0-r12, lr} */
     LDR     r0, [lr, #-4]
     BIC     r0, r0, #0xff000000
     MOV     r1, sp
     MRS     r2, spsr
-    STMFD   sp!, {r2}
+    PUSH {r2}               /* STMFD   sp!, {r2} */
     BL      c_swi_handler
-    LDMFD   sp!, {r2}
-    MSR     spsr, r2       
+    POP {r2}                /* LDMFD   sp!, {r2} */
+    MSR     spsr, r2
     LDMFD   sp!, {r0-r12, pc}^
 
 .globl _get_stack_pointer
 _get_stack_pointer:
-    /* Return the stack pointer value */
-    str     sp, [sp]
-    ldr     r0, [sp]
-
-    /* Return from the function */
-    mov     pc, lr
+    MOV     sp, r0
+    MOV     pc, lr
     
 .globl _get32
 _get32:
-    ldr r0,[r0]
-    bx lr
+    LDR     r0, [r0]
+    BX      lr
 
 .globl _put32
 _put32:
-    str r1,[r0]
-    bx lr
+    STR     r1, [r0]
+    BX      lr
