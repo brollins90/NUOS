@@ -30,13 +30,13 @@ _start:
     LDR pc, _irq_vector_h
     LDR pc, _fiq_vector_h
 _reset_h:           .word _reset
-_undef_vector_h:    .word _hang
+_undef_vector_h:    .word _undef_vector
 _swi_vector_h:      .word _swi_vector
-_prefetch_abort_h:  .word _hang
-_data_abort_h:      .word _hang
-_unused_h:          .word _hang
+_prefetch_abort_h:  .word _prefetch_abort
+_data_abort_h:      .word _data_abort
+_unused_h:          .word _unused
 _irq_vector_h:      .word _irq_vector
-_fiq_vector_h:      .word _hang
+_fiq_vector_h:      .word _fiq_vector
 
 _reset:
     MOV     r0,#0x8000
@@ -49,7 +49,7 @@ _reset:
     /* Initialize stack pointers for all ARM modes */
     MSR     CPSR_c, #(CPSR_IRQ_MODE | CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
     MOV     sp, #IRQ_STACK_TOP
-
+    
     MSR     CPSR_c, #(CPSR_FIQ_MODE | CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
     MOV     sp, #FIQ_STACK_TOP
 
@@ -61,30 +61,28 @@ _reset:
 
     MSR     CPSR_c, #(CPSR_UND_MODE | CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
     MOV     sp, #UND_STACK_TOP
-
+    
     MSR     CPSR_c, #(CPSR_SYS_MODE | CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
     MOV     sp, #SYS_STACK_TOP
 
     BL cstartup
 _hang: B _hang
 
-.globl _disable_interrupts
-_disable_interrupts:
-    /* todo: */
-    BX      lr
+_undef_vector:
+    BL      c_undef_handler
+    B _hang
 
-.globl _enable_interrupts
-_enable_interrupts:
-    MRS     r0, CPSR
-    BIC     r0, r0, #CPSR_IRQ_DISABLE
-    MSR     CPSR_c, r0
-    BX      lr
+_prefetch_abort:
+    BL      c_prefetch_abort
+    B _hang
 
-_irq_vector:
-    PUSH    {r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
-    BL      c_irq_handler
-    POP     {r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
-    SUBS    pc, lr, #4
+_data_abort:
+    BL      c_data_abort
+    B _hang
+
+_unused:
+    BL      c_unused
+    B _hang
 
 _swi_vector:
     PUSH {r0-r12,lr}        /* STMFD   sp!, {r0-r12, lr} */
@@ -98,9 +96,36 @@ _swi_vector:
     MSR     spsr, r2
     LDMFD   sp!, {r0-r12, pc}^
 
+_irq_vector:
+    PUSH    {r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
+    BL      c_irq_handler
+    POP     {r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
+    SUBS    pc, lr, #4
+
+_fiq_vector:
+    BL      c_fiq_vector
+    B _hang
+
+.globl _disable_interrupts
+_disable_interrupts:
+    /* todo: */
+    BX      lr
+
+.globl _enable_interrupts
+_enable_interrupts:
+    MRS     r0, CPSR
+    BIC     r0, r0, #CPSR_IRQ_DISABLE
+    MSR     CPSR_c, r0
+    BX      lr
+
 .globl _get_stack_pointer
 _get_stack_pointer:
-    MOV     sp, r0
+    MOV     r0, sp
+    MOV     pc, lr
+
+.globl _get_lr
+_get_lr:
+    MOV     r0, lr
     MOV     pc, lr
     
 .globl _get32
@@ -112,3 +137,15 @@ _get32:
 _put32:
     STR     r1, [r0]
     BX      lr
+
+.globl _context_switch
+_context_switch:
+    MRS     r12, CPSR       /* r12 is a scratch register and doesnt have to be saved */
+    PUSH    {r0-r12, lr}
+    
+    STR     sp, [r0]        /* put the current sp at location in r0 */
+    LDR     sp, [r1]        /* load sp value from location in r1 */
+    
+    POP     {r0-r12}
+    MSR     CPSR_c, r12
+    POP     {pc}

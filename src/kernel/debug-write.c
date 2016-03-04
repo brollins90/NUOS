@@ -87,8 +87,6 @@ void debug_write_reg()
     debug_write_hex(r14);
     debug_write_string("\n\rr15: ", 7);
     debug_write_hex(r15);
-    debug_write_string("\n\r0xe000: ", 10);
-    debug_write_hex(_get32(0xe000));
     debug_write_string("\n\r", 2);
 }
 

@@ -55,7 +55,7 @@ void armtimer_irq_handler(void)
         //debug_write_string("on ", 3);
     }
     
-    debug_write_reg();
+    /* debug_write_reg(); */
 }
 
 void init_arm_timer(void)

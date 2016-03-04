@@ -44,10 +44,12 @@ $(ELF) : $(BINDIR) \
 	$(OBJDIR)/irq.o \
 	$(OBJDIR)/swi.o \
 	$(OBJDIR)/cstartup.o \
+	$(OBJDIR)/create.o \
 	$(OBJDIR)/debug-write.o \
 	$(OBJDIR)/kernel.o \
 	$(OBJDIR)/memory.o \
 	$(OBJDIR)/processor.o \
+	$(OBJDIR)/scheduler.o \
 	$(OBJDIR)/syscall.o \
 	$(OBJDIR)/rpi-armtimer.o \
 	$(OBJDIR)/rpi-gpio.o \
@@ -58,10 +60,12 @@ $(ELF) : $(BINDIR) \
 	$(OBJDIR)/irq.o \
 	$(OBJDIR)/swi.o \
 	$(OBJDIR)/cstartup.o \
+	$(OBJDIR)/create.o \
 	$(OBJDIR)/debug-write.o \
 	$(OBJDIR)/kernel.o \
 	$(OBJDIR)/memory.o \
 	$(OBJDIR)/processor.o \
+	$(OBJDIR)/scheduler.o \
 	$(OBJDIR)/syscall.o \
 	$(OBJDIR)/rpi-armtimer.o \
 	$(OBJDIR)/rpi-gpio.o \
@@ -106,7 +110,13 @@ $(OBJDIR)/memory.o: $(SRCDIR)/kernel/memory.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
 # processor
+$(OBJDIR)/create.o: $(SRCDIR)/kernel/create.c $(OBJDIR)
+	$(CC) $(CCFLAGS) $(CCINC) $<
+
 $(OBJDIR)/processor.o: $(SRCDIR)/kernel/processor.c $(OBJDIR)
+	$(CC) $(CCFLAGS) $(CCINC) $<
+
+$(OBJDIR)/scheduler.o: $(SRCDIR)/kernel/scheduler.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
 # pi
