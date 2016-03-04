@@ -50,6 +50,7 @@ $(ELF) : $(BINDIR) \
 	$(OBJDIR)/processor.o \
 	$(OBJDIR)/scheduler.o \
 	$(OBJDIR)/syscall.o \
+	$(OBJDIR)/context-switch.o \
 	$(OBJDIR)/rpi-armtimer.o \
 	$(OBJDIR)/rpi-gpio.o \
 	$(OBJDIR)/rpi-irq.o \
@@ -66,6 +67,7 @@ $(ELF) : $(BINDIR) \
 	$(OBJDIR)/processor.o \
 	$(OBJDIR)/scheduler.o \
 	$(OBJDIR)/syscall.o \
+	$(OBJDIR)/context-switch.o \
 	$(OBJDIR)/rpi-armtimer.o \
 	$(OBJDIR)/rpi-gpio.o \
 	$(OBJDIR)/rpi-irq.o \
@@ -117,6 +119,10 @@ $(OBJDIR)/processor.o: $(SRCDIR)/kernel/processor.c $(OBJDIR)
 
 $(OBJDIR)/scheduler.o: $(SRCDIR)/kernel/scheduler.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
+
+# arm
+$(OBJDIR)/context-switch.o: $(SRCDIR)/arch/arm/context-switch.s $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $<
 
 # pi
 $(OBJDIR)/rpi-armtimer.o: $(SRCDIR)/platform/rpi/rpi-armtimer.c $(OBJDIR)
