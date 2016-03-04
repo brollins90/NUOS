@@ -1,5 +1,4 @@
 
-
 APP_NAME = kernel7
 
 CC      = arm-none-eabi-gcc
@@ -18,7 +17,7 @@ IMAGE   = $(BINDIR)/$(APP_NAME).img
 NM      = $(BINDIR)/$(APP_NAME).nm
 LIST    = $(BINDIR)/$(APP_NAME).list
 
-CCINC   = -I$(SRCDIR)/include -I$(SRCDIR)/arch/pi/include -I$(OBJDIR)
+CCINC   = -I$(SRCDIR)/include -I$(SRCDIR)/platform/rpi/include -I$(OBJDIR)
 
 CCFLAGS = -c -O0 -DRPI2 -nostartfiles -o$@
 
@@ -120,16 +119,16 @@ $(OBJDIR)/scheduler.o: $(SRCDIR)/kernel/scheduler.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
 # pi
-$(OBJDIR)/rpi-armtimer.o: $(SRCDIR)/arch/pi/rpi-armtimer.c $(OBJDIR)
+$(OBJDIR)/rpi-armtimer.o: $(SRCDIR)/platform/rpi/rpi-armtimer.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
     
-$(OBJDIR)/rpi-gpio.o: $(SRCDIR)/arch/pi/rpi-gpio.c $(OBJDIR)
+$(OBJDIR)/rpi-gpio.o: $(SRCDIR)/platform/rpi/rpi-gpio.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
-$(OBJDIR)/rpi-irq.o: $(SRCDIR)/arch/pi/rpi-irq.c $(OBJDIR)
+$(OBJDIR)/rpi-irq.o: $(SRCDIR)/platform/rpi/rpi-irq.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
-$(OBJDIR)/rpi-uart.o: $(SRCDIR)/arch/pi/rpi-uart.c $(OBJDIR)
+$(OBJDIR)/rpi-uart.o: $(SRCDIR)/platform/rpi/rpi-uart.c $(OBJDIR)
 	$(CC) $(CCFLAGS) $(CCINC) $<
 
 clean:
