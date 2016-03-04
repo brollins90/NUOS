@@ -4,7 +4,7 @@
 #include "rpi-gpio.h"
 #include "types.h"
 
-#define RPI_AUX_PERIPHERALS_BASE   0x3F215000      // RPI_PERIPHERAL_BASE + 0x215000
+#define RPI_AUX_PERIPHERALS_BASE        ( RPI_PERIPHERAL_BASE + 0x215000 )
 
 struct rpi_aux_peripherals {
     unsigned int AUX_IRQ;               // 0x3F215000   // Auxiliary Interrupt Status

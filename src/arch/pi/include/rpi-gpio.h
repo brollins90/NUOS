@@ -3,7 +3,7 @@
 
 #include "rpi-base.h"
 
-#define RPI_GPIO_BASE       0x3F200000        // RPI_PERIPHERAL_BASE + 0x200000
+#define RPI_GPIO_BASE       ( RPI_PERIPHERAL_BASE + 0x200000UL )
 
 #define LED_GPFSEL          GPFSEL4
 #define LED_GPFBIT          21

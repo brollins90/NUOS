@@ -1,7 +1,7 @@
 #include "irq.h"
 #include "rpi-base.h"
 
-#define RPI_INTERRUPT_CONTROLLER_BASE   0x3F00B200      // RPI_PERIPHERAL_BASE + 0xB200
+#define RPI_INTERRUPT_CONTROLLER_BASE   ( RPI_PERIPHERAL_BASE + 0xB200 )
 
 struct rpi_interrupt_controller {
     unsigned int IRQ_basic_pending;     // 0x3F00B200

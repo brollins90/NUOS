@@ -8,7 +8,7 @@
     Chapter 14
     Timer (ARM side)
 */
-#define RPI_ARMTIMER_BASE                   0x3F00B400      // RPI_PERIPHERAL_BASE + 0xB400
+#define RPI_ARMTIMER_BASE               ( RPI_PERIPHERAL_BASE + 0xB400 )
 
 struct rpi_armtimer {
     unsigned int Load;                  // 0x3F00B400
